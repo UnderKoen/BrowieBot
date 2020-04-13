@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+}
+
+group 'nl.underkoen'
+version '1.0'
+
+sourceCompatibility = 1.10
+
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile ('net.dv8tion:JDA:4.1.1_127') {
+        exclude module: 'opus-java'
+    }
+    compile 'com.google.code.gson:gson:2.8.6'
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'nl.underkoen.browniebot.Main'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
